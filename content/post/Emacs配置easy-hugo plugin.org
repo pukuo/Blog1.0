@@ -1,0 +1,78 @@
++++
+categories = ["hugo"]
+tags = ["hugo"]
+title = "Emacs配置easy-hugo插件"
+date = "2024-02-16T22:02:27+08:00"
+draft = false
++++
+
+<!--more-->
+
+* 配置Emacs插件源（可选）
+#+BEGIN_SRC emacs-lisp
+   (require 'package)
+   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+   (package-initialize)
+
+   (unless (package-installed-p 'use-package)
+     (package-refresh-contents)
+     (package-install 'use-package))
+#+END_SRC
+
+
+* 然后在Emacs配置文件中添加以下代码来安装和配置easy-hugo
+#+BEGIN_SRC emacs-lisp
+   ;; 安装easy-hugo
+   (use-package easy-hugo
+     :ensure t
+     :bind (("C-c C-e" . easy-hugo)
+            ("C-c C-d" . easy-hugo-preview)))
+   ;; 设置Hugo的基本配置信息
+   (setq easy-hugo-basedir "~/path/to/your/hugo/site")
+   (setq easy-hugo-url "https://your-site-url/")
+   (setq easy-hugo-preview-url "http://localhost:1313/")
+   
+#+END_SRC
+
+
+
+
+#+BEGIN_COMMENT
+注意：请确保将上述代码中的~/path/to/your/hugo/site和https://your-site-url/替换为您Hugo站点的实际路径和URL。
+#+END_COMMENT
+
+* Hugo自动部署脚本
+#+BEGIN_SRC shell
+#!/bin/bash
+
+# 进入Hugo博客目录
+cd /path/to/hugo/blog
+
+# 生成静态文件
+hugo
+
+# 进入public目录
+cd public
+
+# 初始化git仓库
+git init
+
+# 添加所有文件到git暂存区
+git add .
+
+# 提交文件到本地仓库
+git commit -m "Deploying to GitHub Pages"
+
+# 添加远程仓库地址
+git remote add origin YOUR_GITHUB_REPO_URL
+
+# 推送文件到远程仓库的gh-pages分支
+git push origin master:gh-pages --force
+
+# 清理Hugo生成的静态文件
+rm -rf public
+
+echo "Deployed successfully!"
+
+#+END_SRC
+
