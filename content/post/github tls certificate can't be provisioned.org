@@ -1,0 +1,37 @@
+---
+title: "github blog 添加自定义域名"
+date: 2024-03-18T20:40:59+08:00
+draft: true
+---
+* github添加custom domain(cloudflare)
+
+** 添加TXT记录
+1.点击头像->找到Settings->然后找到Pages->Add a domain
+
+** 添加CNAME记录
+类型选择`CNAME`,名字是www,值是你的github blog地址(xxxx.github.io)
+
+** 添加A记录
+类型选择`A`,名字选择`@`(代表root用户),值填写GitHub ip地址,以下4个都行
+#+BEGIN_SRC shell
+185.199.108.153
+185.199.109.153
+185.199.110.153
+185.199.111.153
+#+END_SRC
+
+** 添加custom domain && enforcing HTTPS
+进入自己的github blog repositories(xxxxx.github.io),找到Settings,找到Pages,Custom domain 把自己的域名填写进去,点击Save,等待几分钟后,勾选下面的`Enforce HTTPS`,这样就可以通过我们添加的域名访问我们的站点了
+
+** 遇到的问题
+DNS验证成功,但是强制https时，总是提示`Certificate request error is persistent (TLS Certificate can't be provisioned`
+
+** 解决办法
+在Cloudflare中,找到DNS设置,把代理切换到仅DNS(只需单击“代理”一词)
+
+** 参考
+[[https://docs.github.com/en/pages/getting-started-with-github-pages/securing-your-github-pages-site-with-https][添加A记录]]
+[[https://github.com/orgs/community/discussions/22052][Certificate request error is persistent (TLS Certificate can't be provisioned)]]
+
+
+
